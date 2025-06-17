@@ -7,51 +7,63 @@ import org.skypro.skyshop.model.product.SimpleProduct;
 import org.skypro.skyshop.model.search.Searchable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StorageService {
-    private final Map<UUID, Product> products = new HashMap<>();
-    private final Map<UUID, Article> articles = new HashMap<>();
+    private final Map<UUID, Product> storageProduct;
+    private final Map<UUID, Article> storageArticle;
 
-    public StorageService() {
-        TestData();
+    public StorageService(Map<UUID, Product> storageProduct, Map<UUID, Article> storageArticle) {
+        this.storageProduct = storageProduct;
+        this.storageArticle = storageArticle;
+        fillingMap();
     }
 
-    private void TestData() {
-        // Добавляем тестовые продукты
-        addProduct(new SimpleProduct(UUID.randomUUID(), "Арбуз", "Фрукт", 150));
-        addProduct(new DiscountedProduct(UUID.randomUUID(), "Манго египетское", "Фрукт", 130, 5));
-        addProduct(new DiscountedProduct(UUID.randomUUID(), "Манго", "Фрукт", 130, 5));
+    public Map<UUID, Product> getAllStorageProduct() {
+        return storageProduct;
+    }
+
+    public Map<UUID, Article> getAllStorageArticle() {
+        return storageArticle;
+    }
+
+    private void fillingMap() {
+        // Добавляем продукты
+        SimpleProduct watermelon = new SimpleProduct(UUID.randomUUID(), "Арбуз", "Фрукт", 150);
+        DiscountedProduct mangoEgyptian = new DiscountedProduct(UUID.randomUUID(), "Манго египетское", "Фрукт", 130, 5);
+        ;
+        DiscountedProduct mango = new DiscountedProduct(UUID.randomUUID(), "Манго", "Фрукт", 130, 5);
      //   addProduct(new SimpleProduct(UUID.randomUUID(), "Фисташки", "орехи", 200));
 
-        // Добавляем тестовые статьи
-        addArticle(new Article(UUID.randomUUID(), "Когда можно есть арбуз", "Арбуз можно есть в августе."));
-        addArticle(new Article(UUID.randomUUID(), "Где растет дыня", "Дыня растет на бахче."));
-        addArticle(new Article(UUID.randomUUID(), "Соки из фруктов", "Сок можно делать из разных фруктов."));
-        addArticle(new Article(UUID.randomUUID(), "Польза фруктов", "Фрукты вкусны и полезны."));
+        // Добавляем статьи
+        Article watermelonSeason = new Article(UUID.randomUUID(), "Когда можно есть арбуз", "Арбуз можно есть в августе.");
+        Article melon = new Article(UUID.randomUUID(), "Где растет дыня", "Дыня растет на бахче.");
+        Article juices = new Article(UUID.randomUUID(), "Соки из фруктов", "Сок можно делать из разных фруктов.");
+        Article benefits = new Article(UUID.randomUUID(), "Польза фруктов", "Фрукты вкусны и полезны.");
+
+        storageProduct.put(watermelon.getId(), watermelon);
+        storageProduct.put(mangoEgyptian.getId(), mangoEgyptian);
+        storageProduct.put(mango.getId(), mango);
+        storageArticle.put(watermelonSeason.getId(), watermelonSeason);
+        storageArticle.put(melon.getId(), melon);
     }
 
-    public Collection<Product> getAllProducts() {
-        return products.values();
+    public Collection<Searchable> allProductsAndArticle() {
+        return Stream.concat(
+                storageProduct.values().stream(),
+                storageArticle.values().stream()
+        ).collect(Collectors.toList());
     }
 
-    public Collection<Article> getAllArticles() {
-        return articles.values();
+    public Optional<Product> getProductById(UUID id) {
+        return Optional.ofNullable(storageProduct.get(id));
     }
 
-    public Collection<Searchable> getAllSearchables() {
-        List<Searchable> result = new ArrayList<>();
-        result.addAll(products.values());
-        result.addAll(articles.values());
-        return result;
-    }
 
-    private void addProduct(Product product) {
-        products.put(product.getId(), product);
-    }
-
-    private void addArticle(Article article) {
-        articles.put(article.getId(), article);
-    }
 }
