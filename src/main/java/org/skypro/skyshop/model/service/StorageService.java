@@ -34,14 +34,11 @@ public class StorageService {
     }
 
     private void fillingMap() {
-        // Добавляем продукты
         SimpleProduct watermelon = new SimpleProduct(UUID.randomUUID(), "Арбуз", "Фрукт", 150);
-        DiscountedProduct mangoEgyptian = new DiscountedProduct(UUID.randomUUID(), "Манго египетское", "Фрукт", 130, 5);
-        ;
+        DiscountedProduct mangoEgyptian = new DiscountedProduct(UUID.randomUUID(), "Манго египетское", "Фрукт", 130, 5);;
         DiscountedProduct mango = new DiscountedProduct(UUID.randomUUID(), "Манго", "Фрукт", 130, 5);
-     //   addProduct(new SimpleProduct(UUID.randomUUID(), "Фисташки", "орехи", 200));
+        SimpleProduct pistachios = new SimpleProduct(UUID.randomUUID(), "фисташки", "орехи", 200);
 
-        // Добавляем статьи
         Article watermelonSeason = new Article(UUID.randomUUID(), "Когда можно есть арбуз", "Арбуз можно есть в августе.");
         Article melon = new Article(UUID.randomUUID(), "Где растет дыня", "Дыня растет на бахче.");
         Article juices = new Article(UUID.randomUUID(), "Соки из фруктов", "Сок можно делать из разных фруктов.");
@@ -50,6 +47,7 @@ public class StorageService {
         storageProduct.put(watermelon.getId(), watermelon);
         storageProduct.put(mangoEgyptian.getId(), mangoEgyptian);
         storageProduct.put(mango.getId(), mango);
+        storageProduct.put(pistachios.getId(), pistachios);
         storageArticle.put(watermelonSeason.getId(), watermelonSeason);
         storageArticle.put(melon.getId(), melon);
     }
